@@ -56,7 +56,7 @@ class Scene():
         self.collider_list += primitive.collider_list
 
         
-    def render(self, samples_per_pixel, progress_bar = False):
+    def render(self, samples_per_pixel, progress_bar = False, preview = False):
 
         print ("Rendering...")
 
@@ -64,23 +64,42 @@ class Scene():
         color_RGBlinear = rgb(0.,0.,0.)
 
         if progress_bar == True:
-
-
             try:
                 import progressbar
-
             except ModuleNotFoundError:
-                 print("progressbar module is required. \nRun: pip install progressbar")
+                print("progressbar module is required. \nRun: pip install progressbar")
             
+        if preview == True:
+            try:
+                import matplotlib.pyplot as plt
+                plt.figure(figsize=(10,10))
+                plt.ion()
+                plt.show()
+            except ModuleNotFoundError:
+                print("matplotlib module is required. \nRun: pip install matplotlib")
+
+
+        if progress_bar == True:
             bar = progressbar.ProgressBar()
             for i in bar(range(samples_per_pixel)):
                 color_RGBlinear += get_raycolor(self.camera.get_ray(self.n), scene = self)
                 bar.update(i)
+                if preview == True:
+                    plt.title("SPP:" + str(i+1) + " of " + str(samples_per_pixel))
+                    plt.imshow(cf.sRGB_linear_to_sRGB((color_RGBlinear/(i+1)).to_array()).T.reshape(self.camera.screen_height, self.camera.screen_width,3))
+                    plt.pause(0.001)
         else:
-
 
             for i in range(samples_per_pixel):
                 color_RGBlinear += get_raycolor(self.camera.get_ray(self.n), scene = self)
+                if preview == True:
+                    plt.title("SPP:" + str(i+1) + " of " + str(samples_per_pixel))
+                    plt.imshow(cf.sRGB_linear_to_sRGB((color_RGBlinear/(i+1)).to_array()).T.reshape(self.camera.screen_height, self.camera.screen_width,3))
+                    plt.pause(0.001)
+
+                    
+
+
                 
 
 

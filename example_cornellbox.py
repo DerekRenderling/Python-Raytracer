@@ -52,7 +52,7 @@ Sc.add(Sphere( material = blue_glass, center = vec3(370.5, 165/2, -65-185/2), ra
 					 importance_sampled = True)
 # Render 
 
-img = Sc.render(samples_per_pixel = 10, progress_bar = True)
+img = Sc.render(samples_per_pixel = 100, progress_bar = True, preview = True)
 # you are going to need more than 10 samples to remove the noise. At least 1000 for a nice image.
 
 img.save("cornell_box.png")
